@@ -5,14 +5,12 @@
 </ion-header>
 
 <ion-content>
-  <!-- IonGrid con 8 filas, cada una con el canvas y la tabla -->
-  <ion-grid>
+  <ion-grid class="no-gap">
     <ion-row *ngFor="let gauge of gaugesData; let i = index">
       <!-- Columna para el widget (canvas) -->
       <ion-col size="6">
         <canvas id="gaugeCanvas{{ i }}" width="220" height="220"></canvas>
       </ion-col>
-
       <!-- Columna para la tabla de datos -->
       <ion-col size="6">
         <table class="data-table">
