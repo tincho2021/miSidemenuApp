@@ -21,13 +21,14 @@ import {
   IonMenuButton
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cubeSharp, timeSharp, alertSharp } from 'ionicons/icons';
+import { cubeSharp, timeSharp, alertSharp, settingsSharp } from 'ionicons/icons';
 
 // Registrar iconos usados en el menú
 addIcons({
   'cube-sharp': cubeSharp,
   'time-sharp': timeSharp,
-  'alert-sharp': alertSharp
+  'alert-sharp': alertSharp,
+  'settings-sharp': settingsSharp  // Asegúrate de registrar este ícono
 });
 
 @Component({

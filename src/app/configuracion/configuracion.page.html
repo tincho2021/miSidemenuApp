@@ -1,0 +1,56 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Configuración por Tanque</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="guardarConfiguracion()">
+    <ion-list>
+      <ion-item *ngFor="let config of tankConfigs; let i = index">
+        <ion-label position="stacked">Tanque {{ config.tanque }}</ion-label>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="stacked">Altura Máxima (mm)</ion-label>
+                <ion-input [(ngModel)]="config.alturaMaxima" name="alturaMaxima{{i}}" type="number"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="stacked">Volumen Máximo (L)</ion-label>
+                <ion-input [(ngModel)]="config.volumenMaximo" name="volumenMaximo{{i}}" type="number"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="stacked">Color</ion-label>
+                <ion-input [(ngModel)]="config.color" name="color{{i}}" type="text"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="6">
+              <ion-item>
+                <ion-label position="stacked">Producto</ion-label>
+                <ion-select [(ngModel)]="config.producto" name="producto{{i}}">
+                  <ion-select-option *ngFor="let prod of productos" [value]="prod">{{ prod }}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <ion-item>
+                <ion-label>Tanque Activo</ion-label>
+                <ion-toggle [(ngModel)]="config.activo" name="activo{{i}}"></ion-toggle>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="block" type="submit">Guardar Configuración</ion-button>
+  </form>
+</ion-content>

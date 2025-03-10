@@ -1,5 +1,4 @@
 <ion-app>
-  <!-- Split-pane que se activa a partir de pantallas "md" (≈768px) -->
   <ion-split-pane when="md" contentId="main-content">
     <!-- Menú lateral -->
     <ion-menu contentId="main-content" menuId="first">
@@ -13,11 +12,19 @@
           <ion-list-header>Telemedicion</ion-list-header>
           <ion-note>www.Desitec.com.ar</ion-note>
 
-          <!-- Usa *ngFor en lugar de @for -->
+          <!-- Opciones existentes del menú -->
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item [routerLink]="[p.url]" routerLinkActive="selected" lines="none" detail="false" routerDirection="root">
               <ion-icon aria-hidden="true" slot="start" [name]="p.icon + '-sharp'"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+
+          <!-- Nueva opción de Configuración -->
+          <ion-menu-toggle auto-hide="false">
+            <ion-item routerDirection="root" [routerLink]="['/configuracion']" routerLinkActive="selected" lines="none" detail="false">
+              <ion-icon aria-hidden="true" slot="start" name="settings-sharp"></ion-icon>
+              <ion-label>Configuración</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
@@ -26,17 +33,12 @@
 
     <!-- Contenido principal -->
     <ion-content id="main-content">
-      <!-- Barra superior con botón de menú para pantallas pequeñas -->
       <ion-header>
         <ion-toolbar>
-          <!-- El botón de menú solo se muestra en pantallas pequeñas,
-               pues en pantallas "md" o mayores el menú se ve fijo -->
           <ion-menu-button slot="start" menu="first"></ion-menu-button>
           <ion-title>Telemedicion</ion-title>
         </ion-toolbar>
       </ion-header>
-
-      <!-- El router-outlet dentro de un ion-content, permitiendo scroll en el contenido principal -->
       <ion-router-outlet></ion-router-outlet>
     </ion-content>
   </ion-split-pane>

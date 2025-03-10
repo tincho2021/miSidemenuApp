@@ -6,36 +6,43 @@
 
 <ion-content>
   <ion-grid class="no-gap">
+    <!-- Iteramos sobre gaugesData, pero solo mostramos si gauge.activo es true -->
     <ion-row *ngFor="let gauge of gaugesData; let i = index">
-      <!-- Columna para el widget (canvas) -->
-      <ion-col size="6">
-        <canvas id="gaugeCanvas{{ i }}" width="220" height="220"></canvas>
-      </ion-col>
-      <!-- Columna para la tabla de datos -->
-      <ion-col size="6">
-        <table class="data-table">
-          <tr>
-            <td><strong>Volumen</strong></td>
-            <td>{{ gauge.volume }} Litros</td>
-          </tr>
-          <tr>
-            <td><strong>Faltante</strong></td>
-            <td>{{ gauge.missing }} Litros</td>
-          </tr>
-          <tr>
-            <td><strong>Altura</strong></td>
-            <td>{{ gauge.height }} mm</td>
-          </tr>
-          <tr>
-            <td><strong>Bat</strong></td>
-            <td>{{ gauge.battery }} %</td>
-          </tr>
-          <tr>
-            <td><strong>Última</strong></td>
-            <td>{{ gauge.lastUpdate }}</td>
-          </tr>
-        </table>
-      </ion-col>
+      <ng-container *ngIf="gauge.activo">
+        <!-- Encabezado: Tanque X : Producto -->
+        <ion-col size="12">
+          <h2>Tanque {{ gauge.tanque }}: {{ gauge.producto }}</h2>
+        </ion-col>
+        <!-- Fila con widget y tabla -->
+        <ion-col size="6">
+          <canvas id="gaugeCanvas{{ i }}" width="220" height="220"></canvas>
+        </ion-col>
+        <ion-col size="6">
+          <table class="data-table">
+            <tr>
+              <td><strong>Volumen</strong></td>
+              <td>{{ gauge.volume }} Litros</td>
+            </tr>
+            <tr>
+              <td><strong>Faltante</strong></td>
+              <td>{{ gauge.missing }} Litros</td>
+            </tr>
+            <tr>
+              <td><strong>Altura</strong></td>
+              <td>{{ gauge.height }} mm</td>
+            </tr>
+            <tr>
+              <td><strong>Bat</strong></td>
+              <td>{{ gauge.battery }} %</td>
+            </tr>
+            <tr>
+              <td><strong>Última</strong></td>
+              <td>{{ gauge.lastUpdate }}</td>
+            </tr>
+          </table>
+        </ion-col>
+      </ng-container>
     </ion-row>
   </ion-grid>
 </ion-content>
+
