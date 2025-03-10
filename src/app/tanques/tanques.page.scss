@@ -1,0 +1,48 @@
+.no-gap {
+    /* Quita las separaciones por defecto del grid Ionic */
+    --ion-grid-column-padding: 0;
+    --ion-grid-column-gap: 0;
+    --ion-grid-row-padding: 0;
+    --ion-grid-row-gap: 0;
+  
+    ion-row {
+      /* Alinea el contenido de cada fila arriba */
+      display: flex;
+      align-items: flex-start;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  
+    ion-col {
+      /* Quita padding y margen en cada columna */
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+  
+  /* Tabla con bordes finos */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  
+    td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: middle;
+    }
+  }
+  .table-spacer {
+    margin-top: 10px; // Ajusta a tu preferencia
+  }
+  @media (max-width: 600px) {
+    canvas {
+      width: 150px;
+      height: 150px;
+    }
+  }
+  
+  

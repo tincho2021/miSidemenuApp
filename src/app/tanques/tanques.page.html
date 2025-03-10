@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Tanques</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- IonGrid con 8 filas, cada una con el canvas y la tabla -->
+  <ion-grid>
+    <ion-row *ngFor="let gauge of gaugesData; let i = index">
+      <!-- Columna para el widget (canvas) -->
+      <ion-col size="6">
+        <canvas id="gaugeCanvas{{ i }}" width="220" height="220"></canvas>
+      </ion-col>
+
+      <!-- Columna para la tabla de datos -->
+      <ion-col size="6">
+        <table class="data-table">
+          <tr>
+            <td><strong>Volumen</strong></td>
+            <td>{{ gauge.volume }} Litros</td>
+          </tr>
+          <tr>
+            <td><strong>Faltante</strong></td>
+            <td>{{ gauge.missing }} Litros</td>
+          </tr>
+          <tr>
+            <td><strong>Altura</strong></td>
+            <td>{{ gauge.height }} mm</td>
+          </tr>
+          <tr>
+            <td><strong>Bat</strong></td>
+            <td>{{ gauge.battery }} %</td>
+          </tr>
+          <tr>
+            <td><strong>Última</strong></td>
+            <td>{{ gauge.lastUpdate }}</td>
+          </tr>
+        </table>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
