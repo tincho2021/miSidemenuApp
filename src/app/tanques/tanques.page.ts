@@ -136,96 +136,157 @@ export class TanquesPage implements OnInit, AfterViewInit {
   }
 
   // Dibuja el widget de cada tanque (canvas)
-  private phase: number = 0; // Declarada como propiedad de la clase
+// Declara esta propiedad en tu clase TanquesPage:
+// Declaradas como propiedades de la clase
+private phase: number = 0;
+private texturePattern: CanvasPattern | null = null;
 
-  private drawGauge() {
-    const canvases = document.querySelectorAll('canvas');
-    if (!canvases || canvases.length === 0) {
-      console.error('No se encontraron canvas');
+private drawGauge() {
+  // Precarga de textura si no está lista
+  if (!this.texturePattern) {
+    const textureImg = new Image();
+    textureImg.src = 'assets/fuel_texture.png'; // Ajusta la ruta
+    textureImg.onload = () => {
+      const tempCanvas = document.createElement('canvas');
+      const tempCtx = tempCanvas.getContext('2d');
+      if (tempCtx) {
+        this.texturePattern = tempCtx.createPattern(textureImg, 'repeat');
+        this.drawGauge(); // Redibuja
+      }
+    };
+    return;
+  }
+
+  const canvases = document.querySelectorAll('canvas');
+  if (!canvases || canvases.length === 0) {
+    console.error('No se encontraron canvas');
+    return;
+  }
+
+  canvases.forEach((canvas: HTMLCanvasElement, index: number) => {
+    canvas.width = 220;
+    canvas.height = 220;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      console.error('No se pudo obtener el contexto 2D');
       return;
     }
-  
-    canvases.forEach((canvas: HTMLCanvasElement, index: number) => {
-      canvas.width = 220;
-      canvas.height = 220;
-  
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        console.error('No se pudo obtener el contexto 2D');
-        return;
-      }
-  
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-      const centerX = canvas.width / 2;
-      const centerY = canvas.height / 2;
-      const radius = Math.min(centerX, centerY) - 10;
-      const gauge = this.gaugesData[index];
-  
-      // Fondo radial para efecto pseudo-3D
-      const bgGradient = ctx.createRadialGradient(
-        centerX, centerY, radius * 0.1,
-        centerX, centerY, radius
-      );
-      bgGradient.addColorStop(0, '#f5f5f5');
-      bgGradient.addColorStop(1, '#aaaaaa');
-  
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-      ctx.closePath();
-      ctx.fillStyle = bgGradient;
-      ctx.fill();
-  
-      // Clip del círculo
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-      ctx.closePath();
-      ctx.clip();
-  
-      // Calcular la altura base del líquido
-      const fillHeight = radius * 2 * gauge.fill;
-      const baseFillY = centerY + radius - fillHeight;
-  
-      // Parámetros de la onda
-      const amplitude = 3;       // Amplitud reducida para onda sutil
-      const waveFrequency = 0.1; // Frecuencia menor
-  
-      // Reducir la velocidad de animación: disminuimos el incremento de fase
-      this.phase += 0.01; // Antes era 0.05, ahora se incrementa más despacio
-  
-      ctx.beginPath();
-      ctx.moveTo(centerX - radius, centerY + radius);
-      for (let x = -radius; x <= radius; x++) {
-        const waveY = baseFillY + amplitude * Math.sin(x * waveFrequency + this.phase);
-        ctx.lineTo(centerX + x, waveY);
-      }
-      ctx.lineTo(centerX + radius, centerY + radius);
-      ctx.lineTo(centerX - radius, centerY + radius);
-      ctx.closePath();
-  
-      const fillGradient = ctx.createLinearGradient(
-        0, centerY + radius,
-        0, centerY - radius
-      );
-      fillGradient.addColorStop(0, gauge.colorStart);
-      fillGradient.addColorStop(1, gauge.colorEnd);
-  
-      ctx.fillStyle = fillGradient;
-      ctx.fill();
-      ctx.restore();
-  
-      // Borde del círculo
-      ctx.strokeStyle = '#000';
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-      ctx.stroke();
-    });
-  
-    // Solicitar el siguiente cuadro de animación
-    requestAnimationFrame(() => this.drawGauge());
-  }
-  
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = Math.min(centerX, centerY) - 10;
+    const gauge = this.gaugesData[index];
+
+    // =============================
+    // 1) ARO METÁLICO EXTERIOR
+    // =============================
+    // Dibuja un anillo plateado con un gradiente radial
+    const ringWidth = 6; // Grosor del anillo metálico
+    const outerRadius = radius + ringWidth;
+    const ringGradient = ctx.createRadialGradient(
+      centerX, centerY, outerRadius * 0.1,
+      centerX, centerY, outerRadius
+    );
+    ringGradient.addColorStop(0, '#cccccc');
+    ringGradient.addColorStop(1, '#666666');
+
+    // Dibuja el anillo
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, outerRadius, 0, 2 * Math.PI);
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, true);
+    ctx.closePath();
+    ctx.fillStyle = ringGradient;
+    ctx.fill();
+
+    // =============================
+    // 2) FONDO INTERIOR (gris)
+    // =============================
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+    ctx.closePath();
+    ctx.clip();
+
+    // Fondo interior gris (más oscuro para simular profundidad)
+    const interiorGradient = ctx.createRadialGradient(
+      centerX, centerY, radius * 0.05,
+      centerX, centerY, radius
+    );
+    interiorGradient.addColorStop(0, '#e0e0e0');
+    interiorGradient.addColorStop(1, '#aaaaaa');
+    ctx.fillStyle = interiorGradient;
+    ctx.fillRect(centerX - radius, centerY - radius, radius * 2, radius * 2);
+
+    // =============================
+    // 3) REFLEJO SUPERIOR (highlight)
+    // =============================
+    // Simulamos un arco claro en la parte superior
+    ctx.beginPath();
+    const highlightRadius = radius * 0.7;
+    ctx.arc(centerX, centerY - radius * 0.3, highlightRadius, Math.PI, 2 * Math.PI, false);
+    ctx.closePath();
+    ctx.globalAlpha = 0.2;
+    ctx.fillStyle = '#ffffff';
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // =============================
+    // 4) LÍQUIDO CON ONDA Y TEXTURA
+    // =============================
+    // Calcula el fill y la onda
+    const fillHeight = radius * 2 * gauge.fill;
+    const baseFillY = centerY + radius - fillHeight;
+    // Ajustar parámetros de onda
+    const amplitude = 2;
+    const waveFrequency = 0.08;
+    this.phase += 0.005;
+
+    // Onda
+    ctx.beginPath();
+    ctx.moveTo(centerX - radius, centerY + radius);
+    for (let x = -radius; x <= radius; x++) {
+      const waveY = baseFillY + amplitude * Math.sin(x * waveFrequency + this.phase);
+      ctx.lineTo(centerX + x, waveY);
+    }
+    ctx.lineTo(centerX + radius, centerY + radius);
+    ctx.lineTo(centerX - radius, centerY + radius);
+    ctx.closePath();
+
+    // Gradiente base del líquido
+    const fillGradient = ctx.createLinearGradient(
+      0, centerY + radius,
+      0, centerY - radius
+    );
+    fillGradient.addColorStop(0, gauge.colorStart);
+    fillGradient.addColorStop(1, gauge.colorEnd);
+    ctx.fillStyle = fillGradient;
+    ctx.fill();
+
+    // Superponer la textura con opacidad
+    ctx.globalAlpha = 0.2;
+    ctx.fillStyle = this.texturePattern!;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    ctx.restore();
+
+    // =============================
+    // 5) Borde interno del tanque
+    // =============================
+    ctx.strokeStyle = '#333';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+    ctx.stroke();
+  });
+
+  // Animación continua
+  requestAnimationFrame(() => this.drawGauge());
+}
+
+
   
 }
