@@ -28,7 +28,16 @@
             <ion-col size="6">
               <ion-item>
                 <ion-label position="stacked">Color</ion-label>
-                <ion-input [(ngModel)]="config.color" name="color{{i}}" type="text"></ion-input>
+                <ion-select [(ngModel)]="config.color" name="color{{i}}">
+                  <ion-select-option value="#ff0000">Rojo</ion-select-option>
+                  <ion-select-option value="#00ff00">Verde</ion-select-option>
+                  <ion-select-option value="#0000ff">Azul</ion-select-option>
+                  <ion-select-option value="#ffff00">Amarillo</ion-select-option>
+                  <ion-select-option value="#ff00ff">Rosa</ion-select-option>
+                  <ion-select-option value="#00ffff">Cyan</ion-select-option>
+                  <ion-select-option value="#ffffff">Blanco</ion-select-option>
+                  <ion-select-option value="#000000">Negro</ion-select-option>
+                </ion-select>
               </ion-item>
             </ion-col>
             <ion-col size="6">
