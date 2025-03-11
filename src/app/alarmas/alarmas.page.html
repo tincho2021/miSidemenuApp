@@ -1,13 +1,18 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>Alarmas</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Alarmas</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ion-list>
+    <ion-item *ngFor="let alarma of alarmas">
+      <ion-label>
+        <h3>{{ alarma.fecha | date:'dd/MM/yyyy HH:mm' }}</h3>
+        <p>{{ alarma.tanque }}: {{ alarma.mensaje }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="full" (click)="cargarAlarmas()">ACTUALIZAR ALARMAS</ion-button>
 </ion-content>

@@ -1,20 +1,20 @@
-.iframe-container {
-    width: 100%;
-    height: 300px; /* Alto fijo para escritorio */
-    margin-bottom: 10px;
-    overflow: hidden; /* Evita que se expanda fuera del contenedor */
-  }
-  
-  .responsive-iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-  
-  /* En dispositivos móviles, reduce la altura */
-  @media (max-width: 600px) {
-    .iframe-container {
-      height: 200px; /* Ajusta este valor según lo que necesites en móviles */
-    }
-  }
-  
+.historial-container {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Ajustar el iframe para evitar que sea demasiado grande */
+.responsive-iframe {
+  width: 120%;
+  height: 240px; /* Ajusta según necesidad */
+  border: none;
+  transform: scale(0.9); /* Reducimos el tamaño de la imagen */
+  transform-origin: top left; /* Mantiene el zoom desde la esquina superior izquierda */
+  overflow: hidden;
+}
