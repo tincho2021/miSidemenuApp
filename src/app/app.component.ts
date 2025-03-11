@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 import {
   IonApp,
   IonSplitPane,
@@ -14,7 +15,6 @@ import {
   IonIcon,
   IonLabel,
   IonRouterOutlet,
-  IonRouterLink,
   IonHeader,
   IonToolbar,
   IonTitle,
@@ -22,14 +22,24 @@ import {
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { cubeSharp, timeSharp, alertSharp, settingsSharp } from 'ionicons/icons';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 // Registrar iconos usados en el menú
 addIcons({
   'cube-sharp': cubeSharp,
   'time-sharp': timeSharp,
   'alert-sharp': alertSharp,
-  'settings-sharp': settingsSharp  // Asegúrate de registrar este ícono
+  'settings-sharp': settingsSharp
 });
+
+const TITULOS_RUTAS: { [key: string]: string } = {
+  '/tanques': 'Tanques',
+  '/historial': 'Historial',
+  '/alarmas': 'Alarmas',
+  '/descargas': 'Descargas',
+  '/mapa': 'Mapa',
+  '/soporte': 'Soporte'
+};
 
 @Component({
   selector: 'app-root',
@@ -39,7 +49,7 @@ addIcons({
   imports: [
     CommonModule,
     RouterLink,
-    RouterLinkActive,
+    RouterLinkActive,  // Asegura que están importados
     IonApp,
     IonSplitPane,
     IonMenu,
@@ -51,7 +61,6 @@ addIcons({
     IonItem,
     IonIcon,
     IonLabel,
-    IonRouterLink,
     IonRouterOutlet,
     IonHeader,
     IonToolbar,
@@ -69,12 +78,15 @@ export class AppComponent {
     { title: 'Soporte', url: '/soporte', icon: 'help-circle' }
   ];
 
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  public tituloPagina: string = 'Telemedición';
 
-  constructor() {
-    // Aquí puedes agregar iconos adicionales si lo requieres.
-    addIcons({
-      // Ejemplo: agregar otros iconos...
+  constructor(private router: Router, private titleService: Title) {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const rutaActual = event.urlAfterRedirects;
+        this.tituloPagina = TITULOS_RUTAS[rutaActual] || 'Telemedición';
+        this.titleService.setTitle(this.tituloPagina);
+      }
     });
   }
 }
