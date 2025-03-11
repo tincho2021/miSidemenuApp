@@ -3,18 +3,40 @@
   margin-bottom: 10px;
 }
 
-h2 {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 5px;
+/* Mantiene la posibilidad de hacer scroll en toda la página */
+ion-content {
+  --overflow: auto; /* Habilita scroll en la página */
+  overflow: auto !important;
+  touch-action: auto !important;
+  overscroll-behavior: auto;
 }
 
-/* Ajustar el iframe para evitar que sea demasiado grande */
+/* 🔒 Bloquear scroll SOLO en los iframes incrustados */
 .responsive-iframe {
   width: 120%;
   height: 240px; /* Ajusta según necesidad */
   border: none;
-  transform: scale(0.9); /* Reducimos el tamaño de la imagen */
-  transform-origin: top left; /* Mantiene el zoom desde la esquina superior izquierda */
-  overflow: hidden;
+  overflow: hidden !important;
+  transform: scale(0.9);
+  transform-origin: top left;
+  pointer-events: auto; /* Permite interacción pero sin desplazamiento */
+}
+
+/* 🔒 Evitar que los iframes puedan hacer scroll interno */
+.responsive-iframe::-webkit-scrollbar {
+  display: none !important; /* Oculta barras de desplazamiento en WebKit */
+}
+
+.responsive-iframe-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden !important; /* Evita scroll dentro del contenedor */
+}
+
+/* 🔒 Restringe el desbordamiento dentro del iframe sin afectar la página */
+.responsive-iframe-container iframe {
+  overflow: hidden !important;
+  max-width: 100%;
+  max-height: 100%;
 }
