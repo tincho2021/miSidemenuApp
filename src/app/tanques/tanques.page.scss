@@ -1,48 +1,61 @@
 .no-gap {
-    /* Quita las separaciones por defecto del grid Ionic */
-    --ion-grid-column-padding: 0;
-    --ion-grid-column-gap: 0;
-    --ion-grid-row-padding: 0;
-    --ion-grid-row-gap: 0;
-  
-    ion-row {
-      /* Alinea el contenido de cada fila arriba */
-      display: flex;
-      align-items: flex-start;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-  
-    ion-col {
-      /* Quita padding y margen en cada columna */
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
+  /* Elimina separaciones por defecto del grid Ionic */
+  --ion-grid-column-padding: 0;
+  --ion-grid-column-gap: 0;
+  --ion-grid-row-padding: 0;
+  --ion-grid-row-gap: 0;
+
+  ion-row {
+    display: flex;
+    align-items: flex-start;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-  
-  /* Tabla con bordes finos */
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-  
-    td {
-      border: 1px solid #ccc;
-      padding: 6px 8px;
-      text-align: left;
-      vertical-align: middle;
-    }
+
+  ion-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 !important;
+    padding: 0 !important;
   }
-  .table-spacer {
-    margin-top: 10px; // Ajusta a tu preferencia
+}
+
+/* Tabla con bordes finos */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  td {
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: middle;
   }
-  @media (max-width: 600px) {
-    canvas {
-      width: 150px;
-      height: 150px;
-    }
+}
+
+/* Margen adicional para tablas si lo deseas */
+.table-spacer {
+  margin-top: 10px; // Ajusta a tu preferencia
+}
+
+/* Ajuste para centrar y dar estilo a los títulos */
+.title-tanque {
+  text-align: center;
+  margin: 10px 0;
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+/* Ajuste de tamaño para canvas en pantallas pequeñas */
+@media (max-width: 600px) {
+  canvas {
+    width: 150px;
+    height: 150px;
   }
-  
-  
+
+  /* Añadir separación en la fila de contenido (canvas + tabla) */
+  .row-content {
+    margin-top: 10px !important;
+  }
+}
