@@ -18,6 +18,13 @@ interface GaugeData {
   alarmColor?: string; // Para el aro de alarma
 }
 
+const productColors = [
+  { product: "NAFTA SUPER", colorStart: "#ff0000", colorEnd: "#ff4d4d" }, // Rojo
+  { product: "V POWER NAFTA", colorStart: "#0000ff", colorEnd: "#4d4dff" }, // Azul
+  { product: "DIESEL 500", colorStart: "#ffff00", colorEnd: "#ffff66" }, // Amarillo
+  { product: "V POWER DIESEL", colorStart: "#00ff00", colorEnd: "#66ff66" }  // Verde
+];
+
 @Component({
   selector: 'app-tanques',
   templateUrl: './tanques.page.html',
@@ -57,23 +64,35 @@ export class TanquesPage implements OnInit, AfterViewInit {
   private loadTankData() {
     const heightUrl = 'https://api.thingspeak.com/channels/2729087/feeds.json?api_key=GH1L0B0S7GZAFAU&results=1';
     const volumeUrl = 'https://api.thingspeak.com/channels/2729529/feeds.json?api_key=GH1L0B0S7GZAFAU&results=1';
-
+  
     this.http.get<any>(heightUrl).subscribe(heightResponse => {
       if (heightResponse.feeds && heightResponse.feeds.length > 0) {
         const feed = heightResponse.feeds[0];
+  
         for (let i = 0; i < 8; i++) {
           if (feed[`field${i + 1}`]) {
-            const [altura, bateria, faltante, lastUpdate, productoId] = feed[`field${i + 1}`].split(',');
+            const [altura, bateria, faltante, lastUpdate, productoIdStr] = feed[`field${i + 1}`].split(',');
+            const productoId = parseInt(productoIdStr);
+            // Asigna los datos
             this.gaugesData[i].height = parseFloat(altura) || 0;
             this.gaugesData[i].battery = parseFloat(bateria) || 0;
             this.gaugesData[i].missing = parseFloat(faltante) || 0;
             this.gaugesData[i].lastUpdate = lastUpdate || '';
-            this.gaugesData[i].producto = this.productNames[parseInt(productoId)] || 'Desconocido';
-
+            
+            // Usa el mapeo para asignar el nombre y colores del producto
+            if (!isNaN(productoId) && productoId >= 0 && productoId < productColors.length) {
+              this.gaugesData[i].producto = productColors[productoId].product;
+              this.gaugesData[i].colorStart = productColors[productoId].colorStart;
+              this.gaugesData[i].colorEnd = productColors[productoId].colorEnd;
+            } else {
+              this.gaugesData[i].producto = "Desconocido";
+            }
+  
             const maxAltura = 2000;
             this.gaugesData[i].fill = Math.max(0, Math.min(1, this.gaugesData[i].height / maxAltura));
           }
         }
+  
         // Cargar volúmenes
         this.http.get<any>(volumeUrl).subscribe(volumeResponse => {
           if (volumeResponse.feeds && volumeResponse.feeds.length > 0) {
@@ -92,7 +111,7 @@ export class TanquesPage implements OnInit, AfterViewInit {
       console.error('Error al cargar alturas:', error);
     });
   }
-
+  
   /**
    * Carga las alarmas desde el canal de alarmas y asigna alarmColor.
    */
