@@ -4,10 +4,30 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Descargas</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-list>
+    <!-- Iteramos sobre descargas parseadas -->
+    <ion-item *ngFor="let d of descargas">
+      <ion-label>
+        <h2>Registrado en TS: {{ d.created_at | date:'dd/MM/yyyy HH:mm' }}</h2>
+        <p><strong>Fecha/Hora:</strong> {{ d.fecha }}</p>
+        <p><strong>Producto:</strong> {{ d.producto }}</p>
+        <p><strong>Volumen descargado:</strong> {{ d.volumenDescargado }}</p>
+        <p><strong>Turno:</strong> {{ d.turno }}</p>
+        <p><strong>Volumen inicial:</strong> {{ d.volInicial }}</p>
+        <p><strong>Volumen final:</strong> {{ d.volFinal }}</p>
+        <p *ngIf="d.temperatura"><strong>Temperatura:</strong> {{ d.temperatura }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="full" (click)="cargarDescargas()">
+    ACTUALIZAR DESCARGAS
+  </ion-button>
 </ion-content>
