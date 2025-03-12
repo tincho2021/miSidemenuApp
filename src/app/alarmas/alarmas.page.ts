@@ -29,25 +29,49 @@ export class AlarmasPage implements OnInit {
     startDate.setDate(startDate.getDate() - 2); // Últimos 2 días
     const formattedStartDate = startDate.toISOString().split('T')[0];
 
-    const url = `https://api.thingspeak.com/channels/${this.thingSpeakChannelId}/feeds.json?api_key=${this.thingSpeakApiKey}&start=${formattedStartDate}`;
+    // Pedimos más de 1 feed para procesar alarmas antiguas y nuevas
+    const url = `https://api.thingspeak.com/channels/${this.thingSpeakChannelId}/feeds.json?api_key=${this.thingSpeakApiKey}&start=${formattedStartDate}&results=100`;
 
     this.http.get<any>(url).subscribe(response => {
       if (response.feeds && response.feeds.length > 0) {
-        const alarmasMap: { [key: string]: any } = {}; // Para almacenar la última alarma de cada tanque
+        // Ordenamos los feeds por fecha ASCENDENTE (viejo -> nuevo)
+        const feedsSorted = response.feeds.sort((a: any, b: any) => {
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        });
 
-        response.feeds.forEach((feed: any) => {
+        // Estructura para guardar la última alarma de cada tanque
+        const alarmasMap: { [key: string]: any } = {};
+
+        // Recorremos los feeds en orden
+        feedsSorted.forEach((feed: any) => {
           for (let i = 1; i <= 8; i++) {
-            if (feed[`field${i}`]) { // Si el campo tiene valor
-              alarmasMap[`tanque${i}`] = { 
-                fecha: feed.created_at, 
-                mensaje: feed[`field${i}`],
+            const campo = `field${i}`;
+            const valorCampo = feed[campo] ? feed[campo].trim() : '';
+            const fechaFeed = feed.created_at;
+
+            if (valorCampo !== '') {
+              // Si hay texto, guardamos/actualizamos la alarma
+              alarmasMap[`tanque${i}`] = {
+                fecha: fechaFeed,
+                mensaje: valorCampo,
                 tanque: `Tanque ${i}`
               };
+            } else {
+              // Si el campo está vacío, BORRAMOS la alarma previa (si existe) 
+              // solo si este feed es más reciente
+              if (alarmasMap[`tanque${i}`]) {
+                const fechaGuardada = new Date(alarmasMap[`tanque${i}`].fecha);
+                const fechaActual = new Date(fechaFeed);
+                if (fechaActual.getTime() > fechaGuardada.getTime()) {
+                  // Borramos la alarma previa
+                  delete alarmasMap[`tanque${i}`];
+                }
+              }
             }
           }
         });
 
-        // Convertimos el objeto en un array para mostrarlo en el *ngFor
+        // Finalmente convertimos alarmasMap en array
         this.alarmas = Object.keys(alarmasMap).map(key => ({
           tanque: alarmasMap[key].tanque,
           fecha: alarmasMap[key].fecha,
