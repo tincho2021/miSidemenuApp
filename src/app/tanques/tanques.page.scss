@@ -1,61 +1,130 @@
-.no-gap {
-  /* Elimina separaciones por defecto del grid Ionic */
-  --ion-grid-column-padding: 0;
-  --ion-grid-column-gap: 0;
-  --ion-grid-row-padding: 0;
-  --ion-grid-row-gap: 0;
-
-  ion-row {
-    display: flex;
-    align-items: flex-start;
-    margin: 0 !important;
-    padding: 0 !important;
+/* ===============================
+   Estilos Base (Diseño Móvil)
+   =============================== */
+   .no-gap {
+    --ion-grid-column-padding: 0;
+    --ion-grid-column-gap: 0;
+    --ion-grid-row-padding: 0;
+    --ion-grid-row-gap: 0;
+  
+    ion-row {
+      display: flex;
+      align-items: flex-start;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  
+    ion-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
   }
-
-  ion-col {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 0 !important;
-    padding: 0 !important;
+  
+  /* Tabla para móvil */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+  
+    td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: middle;
+    }
   }
-}
-
-/* Tabla con bordes finos */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-
-  td {
-    border: 1px solid #ccc;
-    padding: 6px 8px;
-    text-align: left;
-    vertical-align: middle;
+  
+  /* Espaciado adicional (si lo deseas) */
+  .table-spacer {
+    margin-top: 10px;
   }
-}
-
-/* Margen adicional para tablas si lo deseas */
-.table-spacer {
-  margin-top: 10px; // Ajusta a tu preferencia
-}
-
-/* Ajuste para centrar y dar estilo a los títulos */
-.title-tanque {
-  text-align: center;
-  margin: 10px 0;
-  font-size: 1.3em;
-  font-weight: bold;
-}
-
-/* Ajuste de tamaño para canvas en pantallas pequeñas */
-@media (max-width: 600px) {
+  
+  /* Título del tanque */
+  .title-tanque {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 1.3em;
+    font-weight: bold;
+  }
+  
+  /* Tamaño base del canvas para móviles */
   canvas {
     width: 150px;
     height: 150px;
   }
-
-  /* Añadir separación en la fila de contenido (canvas + tabla) */
+  
+  /* Margen superior para la fila de contenido (móvil) */
   .row-content {
     margin-top: 10px !important;
   }
-}
+  
+  /* ===============================
+     Estilos para Pantallas Grandes (PC)
+     =============================== */
+  @media (min-width: 769px) {
+    /* La fila de contenido se muestra en fila, con fondo, padding y bordes redondeados */
+    .row-content {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 20px;
+      background: #fafafa;
+      padding: 10px;
+      border-radius: 6px;
+    }
+  
+    /* Cada ion-col se expande para ocupar espacio igual y centra su contenido */
+    .row-content ion-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    /* La columna del canvas (primer ion-col) tendrá un margen a la derecha de 10px */
+    .row-content ion-col:first-child {
+      margin-right: 10px;
+    }
+  
+    /* Tamaño del canvas para PC */
+    canvas {
+      width: 220px !important;
+      height: 220px !important;
+    }
+  
+    /* Estilo de tabla con "look" card */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+  
+      tr {
+        &:nth-child(even) {
+          background-color: #f9f9f9;
+        }
+      }
+  
+      td {
+        padding: 8px 12px;
+        border: none;
+        vertical-align: middle;
+  
+        &:first-child {
+          font-weight: 600;
+          color: #555;
+        }
+      }
+    }
+  
+    .title-tanque {
+      font-size: 1.4em;
+      color: #444;
+    }
+  }
+  

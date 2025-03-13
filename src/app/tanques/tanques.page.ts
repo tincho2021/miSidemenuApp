@@ -99,6 +99,13 @@ export class TanquesPage implements OnInit, AfterViewInit {
             const volumeFeed = volumeResponse.feeds[0];
             for (let i = 0; i < 8; i++) {
               this.gaugesData[i].volume = parseFloat(volumeFeed[`field${i + 1}`]) || 0;
+              // Si el volumen es 0, se asume que el tanque no está conectado
+              if (this.gaugesData[i].volume === 0) {
+                this.gaugesData[i].activo = false;
+                this.gaugesData[i].fill = 0;
+              } else {
+                this.gaugesData[i].activo = true;
+              }
             }
             // Cargar alarmas para definir el color del aro
             this.loadAlarmData();
@@ -176,6 +183,14 @@ export class TanquesPage implements OnInit, AfterViewInit {
     }
 
     canvases.forEach((canvas: HTMLCanvasElement, index: number) => {
+      // Si el tanque no está activo, se oculta el canvas
+      if (!this.gaugesData[index].activo) {
+        canvas.style.display = "none";
+        return;
+      } else {
+        canvas.style.display = "block";
+      }
+
       canvas.width = 220;
       canvas.height = 220;
 
