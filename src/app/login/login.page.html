@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form (ngSubmit)="doLogin()">
+    <div class="form-group">
+      <label for="username">Usuario</label>
+      <input
+        id="username"
+        type="text"
+        [(ngModel)]="credentials.username"
+        name="username"
+        required
+        autofocus
+        class="ion-input-native"
+      />
+    </div>
+
+    <div class="form-group ion-margin-top">
+      <label for="password">Contraseña</label>
+      <input
+        id="password"
+        type="password"
+        [(ngModel)]="credentials.password"
+        name="password"
+        required
+        class="ion-input-native"
+      />
+    </div>
+
+    <ion-button expand="block" type="submit" class="ion-margin-top">
+      Ingresar
+    </ion-button>
+  </form>
+</ion-content>

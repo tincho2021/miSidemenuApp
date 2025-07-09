@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import {
@@ -17,18 +17,27 @@ import {
   IonRouterOutlet,
   IonHeader,
   IonToolbar,
-  IonTitle,
-  IonMenuButton
+  IonTitle
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { cubeSharp, timeSharp, alertSharp, settingsSharp } from 'ionicons/icons';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  cubeSharp,
+  timeSharp,
+  alertSharp,
+  downloadSharp,
+  mapSharp,
+  helpCircleSharp,
+  settingsSharp
+} from 'ionicons/icons';
 
 // Registrar iconos usados en el menú
 addIcons({
   'cube-sharp': cubeSharp,
   'time-sharp': timeSharp,
   'alert-sharp': alertSharp,
+  'download-sharp': downloadSharp,
+  'map-sharp': mapSharp,
+  'help-circle-sharp': helpCircleSharp,
   'settings-sharp': settingsSharp
 });
 
@@ -48,11 +57,13 @@ const TITULOS_RUTAS: { [key: string]: string } = {
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
-    RouterLinkActive,  // Asegura que están importados
+    RouterModule,
     IonApp,
     IonSplitPane,
     IonMenu,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
     IonContent,
     IonList,
     IonListHeader,
@@ -61,11 +72,7 @@ const TITULOS_RUTAS: { [key: string]: string } = {
     IonItem,
     IonIcon,
     IonLabel,
-    IonRouterOutlet,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonMenuButton
+    IonRouterOutlet
   ]
 })
 export class AppComponent {
@@ -79,13 +86,17 @@ export class AppComponent {
   ];
 
   public tituloPagina: string = 'Telemedición';
+  public isLoginPage = false;
 
   constructor(private router: Router, private titleService: Title) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        const rutaActual = event.urlAfterRedirects;
-        this.tituloPagina = TITULOS_RUTAS[rutaActual] || 'Telemedición';
+        const ruta = event.urlAfterRedirects;
+        // Título de la pestaña
+        this.tituloPagina = TITULOS_RUTAS[ruta] || 'Telemedición';
         this.titleService.setTitle(this.tituloPagina);
+        // Detectar página de login
+        this.isLoginPage = ruta === '/login';
       }
     });
   }

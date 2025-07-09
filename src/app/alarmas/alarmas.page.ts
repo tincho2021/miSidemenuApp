@@ -15,8 +15,8 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class AlarmasPage implements OnInit {
   alarmas: any[] = [];
-  thingSpeakChannelId = '2774824'; // ID del canal de alarmas
-  thingSpeakApiKey = 'VMLCH1QI8KKX1LCJ'; // API Key de solo lectura
+  thingSpeakChannelId = '3004323'; // ID del canal de alarmas
+  thingSpeakApiKey = 'QW0YYQGH7P4Q9W5W'; // API Key de solo lectura
 
   constructor(private http: HttpClient) {}
 
@@ -54,7 +54,7 @@ export class AlarmasPage implements OnInit {
               alarmasMap[`tanque${i}`] = {
                 fecha: fechaFeed,
                 mensaje: valorCampo,
-                tanque: `Tanque ${i}`
+                tanque: `Sensor ${i}`
               };
             } else {
               // Si el campo está vacío, BORRAMOS la alarma previa (si existe) 

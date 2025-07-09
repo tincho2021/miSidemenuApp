@@ -1,50 +1,60 @@
 import { Routes } from '@angular/router';
-
-// Importa cada página standalone
-import { TanquesPage } from './tanques/tanques.page';
-import { HistorialPage } from './historial/historial.page';
-import { AlarmasPage } from './alarmas/alarmas.page';
-import { DescargasPage } from './descargas/descargas.page';
-import { MapaPage } from './mapa/mapa.page';
-import { SoportePage } from './soporte/soporte.page';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
+  // 1) Cuando entres a la raíz, ve a login
   {
     path: '',
-    redirectTo: 'tanques',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
+
+  // 2) Login (sin guardia)
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.page').then(m => m.LoginPage)
+  },
+
+  // 3) Rutas protegidas por AuthGuard
   {
     path: 'tanques',
-    loadComponent: () => import('./tanques/tanques.page').then(m => m.TanquesPage)
+    loadComponent: () => import('./tanques/tanques.page').then(m => m.TanquesPage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'historial',
-    loadComponent: () => import('./historial/historial.page').then(m => m.HistorialPage)
+    loadComponent: () => import('./historial/historial.page').then(m => m.HistorialPage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'alarmas',
-    loadComponent: () => import('./alarmas/alarmas.page').then(m => m.AlarmasPage)
+    loadComponent: () => import('./alarmas/alarmas.page').then(m => m.AlarmasPage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'descargas',
-    loadComponent: () => import('./descargas/descargas.page').then(m => m.DescargasPage)
+    loadComponent: () => import('./descargas/descargas.page').then(m => m.DescargasPage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'mapa',
-    loadComponent: () => import('./mapa/mapa.page').then(m => m.MapaPage)
+    loadComponent: () => import('./mapa/mapa.page').then(m => m.MapaPage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'soporte',
-    loadComponent: () => import('./soporte/soporte.page').then(m => m.SoportePage)
+    loadComponent: () => import('./soporte/soporte.page').then(m => m.SoportePage),
+    canActivate: [AuthGuard]
   },
   {
     path: 'configuracion',
-    loadComponent: () => import('./configuracion/configuracion.page').then( m => m.ConfiguracionPage)
+    loadComponent: () => import('./configuracion/configuracion.page').then(m => m.ConfiguracionPage),
+    canActivate: [AuthGuard]
   },
+
+  // 4) Cualquier otra ruta desconocida, vuelve a login
   {
-    path: 'configuracion',
-    loadComponent: () => import('./configuracion/configuracion.page').then(m => m.ConfiguracionPage)
+    path: '**',
+    redirectTo: 'login'
   }
-  
 ];

@@ -52,8 +52,8 @@ export class DescargasPage implements OnInit {
   descargas: DescargaParsed[] = [];
 
   // Ajusta estos valores a tu canal de descargas
-  private thingSpeakChannelId = '2774825';
-  private thingSpeakApiKey = 'TWOSPXYG6J64RAP8'; // Reemplaza si tu canal requiere API Key
+  private thingSpeakChannelId = '3004324';
+  private thingSpeakApiKey = 'X854STCYG8T6PI6X'; // Reemplaza si tu canal requiere API Key
 
   // Array de nombres de producto; se usa para convertir el número a nombre
   productNames: string[] = ["NAFTA SUPER", "V POWER NAFTA", "DIESEL 500", "V POWER DIESEL"];

@@ -24,6 +24,11 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+/* Oculta menu y split-pane cuando estemos en login */
+body.login-page ion-menu,
+body.login-page ion-split-pane {
+  display: none !important;
+}
 
 /**
  * Ionic Dark Mode

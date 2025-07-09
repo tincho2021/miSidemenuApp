@@ -1,45 +1,56 @@
 <ion-app>
-  <ion-split-pane when="md" contentId="main-content">
-    <!-- Menú lateral -->
-    <ion-menu contentId="main-content" menuId="first">
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Menu</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content>
-        <ion-list id="inbox-list">
-          <ion-list-header>Plus-View</ion-list-header>
-          <ion-note>www.Desitec.com.ar</ion-note>
+  <!-- Si estamos en login, solo renderizamos el outlet -->
+  <ng-container *ngIf="isLoginPage; else appWithMenu">
+    <ion-router-outlet></ion-router-outlet>
+  </ng-container>
 
-          <!-- Opciones existentes del menú -->
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item [routerLink]="[p.url]" routerLinkActive="selected" lines="none" detail="false" routerDirection="root">
-              <ion-icon aria-hidden="true" slot="start" [name]="p.icon + '-sharp'"></ion-icon>
-              <ion-label>{{ p.title }}</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
+  <!-- Si NO estamos en login, mostramos menú y split-pane -->
+  <ng-template #appWithMenu>
+    <ion-split-pane contentId="main">
+      <ion-menu menuId="first" contentId="main">
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Menu</ion-title>
+          </ion-toolbar>
+        </ion-header>
 
-          <!-- Nueva opción de Configuración -->
-          <ion-menu-toggle auto-hide="false">
-            <ion-item routerDirection="root" [routerLink]="['/configuracion']" routerLinkActive="selected" lines="none" detail="false">
-              <ion-icon aria-hidden="true" slot="start" name="settings-sharp"></ion-icon>
-              <ion-label>Configuración</ion-label>
-            </ion-item>
-          </ion-menu-toggle>
-        </ion-list>
-      </ion-content>
-    </ion-menu>
+        <ion-content>
+          <ion-list id="inbox-list">
+            <ion-list-header>Plus-View</ion-list-header>
+            <ion-note>Telemedición REMOTA</ion-note>
 
-    <!-- Contenido principal -->
-    <ion-content id="main-content">
-      <ion-header>
-        <ion-toolbar>
-          <ion-menu-button slot="start" menu="first"></ion-menu-button>
-          <ion-title>{{ tituloPagina }}</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-router-outlet></ion-router-outlet>
-    </ion-content>
-  </ion-split-pane>
+            <!-- Opciones dinámicas -->
+            <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
+              <ion-item
+                [routerLink]="[p.url]"
+                routerLinkActive="selected"
+                lines="none"
+                detail="false"
+                routerDirection="root"
+              >
+                <ion-icon slot="start" [name]="p.icon + '-sharp'"></ion-icon>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+
+            <!-- Configuración -->
+            <ion-menu-toggle auto-hide="false">
+              <ion-item
+                [routerLink]="['/configuracion']"
+                routerLinkActive="selected"
+                lines="none"
+                detail="false"
+                routerDirection="root"
+              >
+                <ion-icon slot="start" name="settings-sharp"></ion-icon>
+                <ion-label>Configuración</ion-label>
+              </ion-item>
+            </ion-menu-toggle>
+          </ion-list>
+        </ion-content>
+      </ion-menu>
+
+      <ion-router-outlet id="main"></ion-router-outlet>
+    </ion-split-pane>
+  </ng-template>
 </ion-app>
